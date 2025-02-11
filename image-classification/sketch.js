@@ -1,12 +1,18 @@
 let classifier;
-let video;
-let img;
+let video; // For webcam
+let img; // For static image
 let label = "waiting...";
 let confidence = 0;
 
 // The preload() function in p5.js is executed before setup(), ensuring assets (like images, fonts, models) are fully loaded before the sketch starts.
 function preload() {
+    // Load customize model from teachablemachine 
+    // classifier = ml5.imageClassifier("https://teachablemachine.withgoogle.com/models/MaIU7-VK_/")
+
+    // Load the MobileNet model
     classifier = ml5.imageClassifier("MobileNet")
+
+    // static image
     // img = loadImage("chainlinkfence.jpeg") // key word loadImage is a function in p5 that loads an image
 }
 
@@ -20,13 +26,14 @@ function gotResults(results) {
 function setup() {
     createCanvas(400, 400); // key word createCanvas is a function to create a canvas in p5
 
-    video = createCapture(); // key word createCapture is a function in p5 that captures video from the webcam
+    video = createCapture(VIDEO); // key word createCapture is a function in p5 that captures video from the webcam
     video.hide(); // key word hide is a function in p5 that hides the video
 
     video.elt.muted = true; // mute the video so that it doesn't play the audio
 
     // classifier.classify(img, gotResults, 1) // it's a async function so i need a callback function to get the results ,8 is the number of results i want
     classifier.classifyStart(video, gotResults, 1) // it's a async function so i need a callback function to get the results ,8 is the number of results i want
+
 }
 
 // Runs in a loop forever (by default, 60 times per second).
@@ -46,5 +53,9 @@ function draw() {
     textAlign(CENTER, CENTER);
     noStroke();
     text(label, 200, 350);
-    text(confidence, 200, 380);
+    // text(confidence, 200, 380);
+
+    if (label == "Rubic's cube") {
+        background(0, 255, 0, 100);
+    }
 }

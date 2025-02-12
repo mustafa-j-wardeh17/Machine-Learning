@@ -16,7 +16,7 @@ function mousePressed() {
 
 // Runs once at the beginning.
 function setup() {
-    createCanvas(640,480); // key word createCanvas is a function to create a canvas in p5
+    createCanvas(640, 480); // key word createCanvas is a function to create a canvas in p5
     video = createCapture(VIDEO);
     video.hide();
     video.elt.muted = true;
@@ -31,8 +31,15 @@ function draw() {
         let pose = poses[0];
         let x = pose.nose.x;
         let y = pose.nose.y;
-        fill(255,0,0);
+        fill(255, 0, 0);
         circle(x, y, 15);
+
+        for (let i = 0; i < pose.keypoints.length; i++) {
+            let keypoint = pose.keypoints[i];
+            fill(0, 0, 255);
+            noStroke(); // To remove the stroke
+            circle(keypoint.x, keypoint.y, 8);
+        }
     }
 
 }

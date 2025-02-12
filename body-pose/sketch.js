@@ -1,7 +1,7 @@
 let video; // For webcam
 let bodyPose;
 let poses = [];
-
+let connections = [];
 function preload() {
     bodyPose = ml5.bodyPose("MoveNet")
 }
@@ -22,6 +22,7 @@ function setup() {
     video.elt.muted = true;
 
     bodyPose.detectStart(video, gotResults)
+    connections = bodyPose.getSkeleton()
 }
 
 function draw() {
@@ -36,9 +37,22 @@ function draw() {
 
         for (let i = 0; i < pose.keypoints.length; i++) {
             let keypoint = pose.keypoints[i];
-            fill(0, 0, 255);
-            noStroke(); // To remove the stroke
-            circle(keypoint.x, keypoint.y, 8);
+            if (keypoint.confidence > 0.3) { // To remove the keypoint that has low confidence
+                fill(0, 0, 255);
+                noStroke(); // To remove the stroke
+                circle(keypoint.x, keypoint.y, 8);
+            }
+        }
+
+        for (let i = 0; i < connections.length; i++) {
+            let connection = connections[i];
+            let partA = connection[0];
+            let partB = connection[1];
+            let keyPointA = pose.keypoints[partA];
+            let keyPointB = pose.keypoints[partB];
+            stroke(0, 255, 0);
+            strokeWeight(2);
+            line(keyPointA.x, keyPointA.y, keyPointB.x, keyPointB.y);
         }
     }
 

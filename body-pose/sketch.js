@@ -16,7 +16,12 @@ function mousePressed() {
 
 // Runs once at the beginning.
 function setup() {
-    createCanvas(640, 480); // key word createCanvas is a function to create a canvas in p5
+    createCanvas(1280,720); // key word createCanvas is a function to create a canvas in p5
+    // For static video
+    // video = createVideo('test.mov');
+    // video.loop()
+
+    // For camera
     video = createCapture(VIDEO);
     video.hide();
     video.elt.muted = true;
@@ -26,28 +31,24 @@ function setup() {
 }
 
 function draw() {
-    image(video, 0, 0, width, height)
+    background(0) // to showing the sketch in dark view
+    //image(video, 0, 0, width, height); // to show video in canvas
 
     if (poses.length > 0) {
-        // Nose position
         let pose = poses[0];
-        let x = pose.nose.x;
-        let y = pose.nose.y;
+        let x = pose.nose.x * (width / video.width);
+        let y = pose.nose.y * (height / video.height);
 
-
-
-        // -------------------------------------------
-        // ------------Body Pose Detection------------
-        // -------------------------------------------
         fill(255, 0, 0);
         circle(x, y, 15);
+
         // draw the keypoints
         for (let i = 0; i < pose.keypoints.length; i++) {
             let keypoint = pose.keypoints[i];
-            if (keypoint.confidence > 0.3) { // To remove the keypoint that has low confidence
+            if (keypoint.confidence > 0.3) {
                 fill(0, 0, 255);
-                noStroke(); // To remove the stroke
-                circle(keypoint.x, keypoint.y, 8);
+                noStroke();
+                circle(keypoint.x * (width / video.width), keypoint.y * (height / video.height), 8);
             }
         }
 
@@ -60,33 +61,12 @@ function draw() {
             let keyPointB = pose.keypoints[partB];
             if (keyPointA.confidence > 0.3 && keyPointB.confidence > 0.3) {
                 stroke(0, 255, 0);
-                strokeWeight(2);
-                line(keyPointA.x, keyPointA.y, keyPointB.x, keyPointB.y);
+                strokeWeight(5);
+                line(
+                    keyPointA.x * (width / video.width), keyPointA.y * (height / video.height),
+                    keyPointB.x * (width / video.width), keyPointB.y * (height / video.height)
+                );
             }
         }
-
-
-
-        // ----------------------------------------------------------------------------------------------------
-        // -----------For Nose Cicle Size to be like the distance between right hand and left hand ------------
-        // ----------------------------------------------------------------------------------------------------
-
-        // let rx = pose.right_wrist.x
-        // let ry = pose.right_wrist.y
-
-        // let lx = pose.left_wrist.x
-        // let ly = pose.left_wrist.y
-
-        // fill(0, 0, 255);
-        // circle(rx, ry, 15);
-
-        // fill(0, 255, 0);
-        // circle(lx, ly, 15);
-
-        // let distance = dist(rx, ry, lx, ly)
-
-        // fill(255, 0, 0);
-        // circle(x, y, distance);
     }
-
 }

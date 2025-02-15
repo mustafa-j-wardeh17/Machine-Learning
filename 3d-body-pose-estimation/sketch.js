@@ -57,8 +57,8 @@ function draw() {
                 stroke(0, 255, 255);
                 strokeWeight(4);
                 beginShape();
-                vertex(keyPointA.x *300, keyPointA.y *300, keyPointA.z *300);
-                vertex(keyPointB.x *300, keyPointB.y *300, keyPointB.z *300);
+                vertex(keyPointA.x * 300, keyPointA.y * 300, keyPointA.z * 300);
+                vertex(keyPointB.x * 300, keyPointB.y * 300, keyPointB.z * 300);
                 endShape();
             }
         }
@@ -72,7 +72,7 @@ function draw() {
 
             if (keypoint.confidence > 0.1) {
                 push();
-                translate(keypoint.x *300, keypoint.y *300, keypoint.z *300);
+                translate(keypoint.x * 300, keypoint.y * 300, keypoint.z * 300);
                 rotateZ(angle);
                 box(4);
                 pop();
